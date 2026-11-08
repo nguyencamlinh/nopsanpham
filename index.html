@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cẩm Linh Tin Học</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+  <style>
+    :root{
+      --primary:#2563eb;
+      --primary-2:#3b82f6;
+      --primary-light:#eff6ff;
+      --cyan:#06b6d4;
+      --success:#10b981;
+      --danger:#ef4444;
+      --ink:#172554;
+      --muted:#64748b;
+      --white:#ffffff;
+      --bg:#eaf4ff;
+      --card:rgba(255,255,255,.90);
+      --line:#dbeafe;
+      --shadow:0 25px 60px rgba(30,64,175,.16);
+    }
+
+    *{box-sizing:border-box}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:'Quicksand',sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(59,130,246,.20), transparent 27%),
+        radial-gradient(circle at 90% 15%, rgba(6,182,212,.16), transparent 25%),
+        radial-gradient(circle at 50% 100%, rgba(37,99,235,.13), transparent 32%),
+        linear-gradient(135deg,#f8fcff 0%,#eaf4ff 48%,#dbeafe 100%);
+      overflow-x:hidden;
+    }
+
+    /* Background 3D */
+    .scene{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+
+    .orb{
+      position:absolute;
+      border-radius:50%;
+      filter:blur(.2px);
+      opacity:.55;
+      box-shadow:
+        inset -18px -22px 40px rgba(30,64,175,.10),
+        inset 15px 14px 30px rgba(255,255,255,.85),
+        0 25px 60px rgba(37,99,235,.12);
+      animation:float 9s ease-in-out infinite;
+    }
+
+    .orb.one{width:180px;height:180px;left:-70px;top:120px;background:linear-gradient(145deg,#dbeafe,#93c5fd)}
+    .orb.two{width:120px;height:120px;right:7%;top:90px;background:linear-gradient(145deg,#cffafe,#67e8f9);animation-delay:1.5s}
+    .orb.three{width:230px;height:230px;right:-100px;bottom:50px;background:linear-gradient(145deg,#bfdbfe,#60a5fa);animation-delay:3s}
+    .orb.four{width:75px;height:75px;left:18%;bottom:8%;background:linear-gradient(145deg,#e0f2fe,#7dd3fc);animation-delay:2s}
+
+    .shape{
+      position:absolute;
+      opacity:.16;
+      color:#2563eb;
+      animation:float 7s ease-in-out infinite;
+    }
+    .shape.s1{top:23%;left:5%;font-size:42px}
+    .shape.s2{top:55%;right:5%;font-size:50px;animation-delay:1s}
+    .shape.s3{bottom:12%;left:6%;font-size:34px;animation-delay:2s}
+    .shape.s4{top:8%;left:48%;font-size:28px;animation-delay:3s}
+
+    @keyframes float{
+      0%,100%{transform:translate3d(0,0,0) rotate(0deg)}
+      50%{transform:translate3d(0,-18px,0) rotate(7deg)}
+    }
+
+    .app{
+      position:relative;
+      z-index:2;
+      width:min(1180px,calc(100% - 28px));
+      margin:28px auto 45px;
+    }
+
+    /* Header */
+    .hero{
+      position:relative;
+      padding:28px 32px;
+      border:1px solid rgba(255,255,255,.9);
+      border-radius:30px;
+      background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(239,246,255,.78));
+      box-shadow:var(--shadow), inset 0 1px 0 #fff;
+      backdrop-filter:blur(18px);
+      transform:translateZ(0);
+      overflow:hidden;
+      margin-bottom:24px;
+    }
+
+    .hero:before{
+      content:"";
+      position:absolute;
+      width:280px;height:280px;
+      border-radius:50%;
+      right:-100px;top:-140px;
+      background:radial-gradient(circle,rgba(59,130,246,.20),transparent 70%);
+    }
+
+    .hero-inner{
+      position:relative;
+      display:flex;
+      align-items:center;
+      gap:20px;
+    }
+
+    .logo-3d{
+      flex:0 0 82px;
+      width:82px;height:82px;
+      display:grid;
+      place-items:center;
+      border-radius:24px;
+      color:white;
+      font-size:36px;
+      background:linear-gradient(145deg,#60a5fa,#2563eb 55%,#1d4ed8);
+      box-shadow:
+        0 14px 0 #1e40af,
+        0 24px 35px rgba(37,99,235,.28),
+        inset 6px 6px 12px rgba(255,255,255,.32);
+      transform:perspective(500px) rotateX(7deg) rotateY(-8deg);
+    }
+
+    .hero h1{
+      margin:0 0 5px;
+      font-size:clamp(1.45rem,3vw,2.2rem);
+      font-weight:700;
+      letter-spacing:-.5px;
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:.98rem;
+      font-weight:600;
+    }
+
+    .badge{
+      margin-left:auto;
+      padding:9px 14px;
+      border-radius:999px;
+      background:#dbeafe;
+      color:#1d4ed8;
+      font-weight:700;
+      font-size:.86rem;
+      box-shadow:inset 0 2px 5px rgba(37,99,235,.08);
+      white-space:nowrap;
+    }
+
+    /* Main cards */
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(340px,.88fr) minmax(460px,1.12fr);
+      gap:24px;
+      align-items:start;
+    }
+
+    .card{
+      position:relative;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.95);
+      border-radius:28px;
+      padding:28px;
+      box-shadow:var(--shadow), inset 0 1px 0 white;
+      backdrop-filter:blur(18px);
+      overflow:hidden;
+    }
+
+    .card:after{
+      content:"";
+      position:absolute;
+      left:20px;right:20px;top:0;
+      height:4px;
+      border-radius:0 0 8px 8px;
+      background:linear-gradient(90deg,#2563eb,#06b6d4,#60a5fa);
+      opacity:.9;
+    }
+
+    .card-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:0 0 22px;
+      font-size:1.2rem;
+      font-weight:700;
+    }
+
+    .title-icon{
+      width:44px;height:44px;
+      display:grid;
+      place-items:center;
+      border-radius:14px;
+      color:#1d4ed8;
+      background:linear-gradient(145deg,#dbeafe,#eff6ff);
+      box-shadow:0 7px 15px rgba(37,99,235,.13), inset 0 1px white;
+    }
+
+    .form-group{margin-bottom:18px}
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      color:#334155;
+      font-size:.93rem;
+      font-weight:700;
+    }
+
+    label i{
+      color:var(--primary);
+      margin-right:6px;
+    }
+
+    .input{
+      width:100%;
+      height:52px;
+      border:2px solid #dbe5f1;
+      border-radius:15px;
+      padding:0 15px;
+      outline:none;
+      color:var(--ink);
+      background:rgba(248,250,252,.9);
+      font-family:inherit;
+      font-size:1rem;
+      font-weight:600;
+      transition:.25s ease;
+      box-shadow:inset 0 2px 5px rgba(15,23,42,.025);
+    }
+
+    .input:focus{
+      border-color:#60a5fa;
+      background:#fff;
+      box-shadow:0 0 0 5px rgba(59,130,246,.12), inset 0 2px 5px rgba(15,23,42,.02);
+      transform:translateY(-1px);
+    }
+
+    /* Upload zone */
+    .upload{
+      position:relative;
+      min-height:178px;
+      border:2.5px dashed #9dbce9;
+      border-radius:20px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:22px;
+      cursor:pointer;
+      background:linear-gradient(145deg,#f8fbff,#eef6ff);
+      transition:.25s ease;
+      box-shadow:inset 0 2px 10px rgba(37,99,235,.035);
+    }
+
+    .upload:hover,.upload.dragover{
+      border-color:#2563eb;
+      background:linear-gradient(145deg,#eff6ff,#dbeafe);
+      transform:translateY(-2px);
+      box-shadow:0 14px 28px rgba(37,99,235,.11);
+    }
+
+    .upload-icon{
+      width:58px;height:58px;
+      display:grid;
+      place-items:center;
+      margin-bottom:10px;
+      border-radius:18px;
+      color:#2563eb;
+      font-size:25px;
+      background:white;
+      box-shadow:0 10px 20px rgba(37,99,235,.14), inset 0 1px 0 #fff;
+    }
+
+    .upload strong{font-size:1rem}
+    .upload small{margin-top:5px;color:var(--muted);font-weight:600}
+    #fileInput{display:none}
+
+    .file-name{
+      margin-top:10px;
+      color:#1d4ed8;
+      font-weight:700;
+      word-break:break-word;
+    }
+
+    /* Button */
+    .submit-btn{
+      position:relative;
+      width:100%;
+      height:56px;
+      margin-top:4px;
+      border:0;
+      border-radius:16px;
+      cursor:pointer;
+      color:white;
+      font-family:inherit;
+      font-size:1.03rem;
+      font-weight:700;
+      background:linear-gradient(145deg,#3b82f6,#2563eb 55%,#1d4ed8);
+      box-shadow:
+        0 7px 0 #1e40af,
+        0 16px 30px rgba(37,99,235,.28),
+        inset 0 1px 0 rgba(255,255,255,.35);
+      transition:.16s ease;
+    }
+
+    .submit-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 9px 0 #1e40af,0 20px 35px rgba(37,99,235,.31),inset 0 1px 0 rgba(255,255,255,.35);
+    }
+
+    .submit-btn:active{
+      transform:translateY(5px);
+      box-shadow:0 2px 0 #1e40af,0 8px 16px rgba(37,99,235,.2);
+    }
+
+    .submit-btn:disabled{
+      cursor:not-allowed;
+      opacity:.65;
+      transform:none;
+      box-shadow:0 4px 0 #94a3b8;
+    }
+
+    .loading{
+      display:none;
+      margin-top:15px;
+      text-align:center;
+      color:#2563eb;
+      font-weight:700;
+    }
+
+    .notice{
+      margin-top:17px;
+      padding:12px 14px;
+      border-radius:13px;
+      color:#475569;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      font-size:.86rem;
+      font-weight:600;
+      line-height:1.5;
+    }
+
+    /* History */
+    .history-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .history-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:1.2rem;
+      font-weight:700;
+    }
+
+    .count{
+      min-width:34px;
+      height:30px;
+      padding:0 9px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color:#1d4ed8;
+      background:#dbeafe;
+      font-size:.85rem;
+      font-weight:700;
+    }
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:1fr 145px;
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .search-wrap{position:relative}
+    .search-wrap i{
+      position:absolute;
+      left:14px;top:50%;
+      transform:translateY(-50%);
+      color:#94a3b8;
+    }
+
+    .search-input{
+      width:100%;
+      height:44px;
+      border:2px solid #e2e8f0;
+      border-radius:13px;
+      padding:0 12px 0 39px;
+      outline:none;
+      font-family:inherit;
+      font-weight:600;
+      background:#f8fafc;
+    }
+
+    .search-input:focus{
+      border-color:#93c5fd;
+      background:#fff;
+    }
+
+    .history-scroll{
+      max-height:535px;
+      overflow:auto;
+      padding-right:4px;
+    }
+
+    .history-scroll::-webkit-scrollbar{width:7px}
+    .history-scroll::-webkit-scrollbar-thumb{
+      background:#bfdbfe;
+      border-radius:10px;
+    }
+
+    .student-row{
+      display:grid;
+      grid-template-columns:42px 1fr auto;
+      align-items:center;
+      gap:12px;
+      padding:13px;
+      margin-bottom:10px;
+      border:1px solid #e5eefb;
+      border-radius:17px;
+      background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(247,251,255,.9));
+      box-shadow:0 8px 18px rgba(30,64,175,.06), inset 0 1px white;
+      transition:.22s ease;
+    }
+
+    .student-row:hover{
+      transform:translateX(3px) translateY(-1px);
+      box-shadow:0 13px 25px rgba(30,64,175,.10);
+      border-color:#bfdbfe;
+    }
+
+    .number{
+      width:40px;height:40px;
+      display:grid;
+      place-items:center;
+      border-radius:13px;
+      color:#1d4ed8;
+      background:linear-gradient(145deg,#dbeafe,#eff6ff);
+      box-shadow:inset 0 1px white,0 5px 10px rgba(37,99,235,.08);
+      font-weight:700;
+    }
+
+    .student-name{
+      color:#0f172a;
+      font-weight:700;
+      line-height:1.2;
+    }
+
+    .student-meta{
+      margin-top:4px;
+      color:#64748b;
+      font-size:.82rem;
+      font-weight:600;
+    }
+
+    .class-badge{
+      padding:7px 10px;
+      border-radius:10px;
+      color:#0369a1;
+      background:#e0f2fe;
+      font-size:.78rem;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .empty{
+      padding:40px 15px;
+      text-align:center;
+      color:#94a3b8;
+      font-weight:600;
+    }
+
+    .empty i{
+      display:block;
+      margin-bottom:10px;
+      font-size:35px;
+      color:#93c5fd;
+    }
+
+    .footer{
+      margin-top:20px;
+      text-align:center;
+      color:#64748b;
+      font-size:.82rem;
+      font-weight:600;
+    }
+
+    @media(max-width:900px){
+      .layout{grid-template-columns:1fr}
+      .history-scroll{max-height:420px}
+    }
+
+    @media(max-width:620px){
+      .app{width:min(100% - 16px,1180px);margin-top:10px}
+      .hero{padding:22px 18px;border-radius:23px}
+      .hero-inner{align-items:flex-start}
+      .logo-3d{width:64px;height:64px;flex-basis:64px;font-size:27px;border-radius:19px;box-shadow:0 6px 0 #1e40af,0 16px 25px rgba(37,99,235,.23)}
+      .badge{display:none}
+      .hero h1{font-size:1.35rem}
+      .hero p{font-size:.85rem}
+      .card{padding:20px;border-radius:23px}
+      .toolbar{grid-template-columns:1fr}
+      .student-row{grid-template-columns:38px 1fr}
+      .class-badge{grid-column:2;justify-self:start}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scene" aria-hidden="true">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+    <div class="orb four"></div>
+    <i class="fa-solid fa-graduation-cap shape s1"></i>
+    <i class="fa-solid fa-book-open shape s2"></i>
+    <i class="fa-solid fa-lightbulb shape s3"></i>
+    <i class="fa-solid fa-star shape s4"></i>
+  </div>
+
+  <main class="app">
+    <header class="hero animate__animated animate__fadeInDown">
+      <div class="hero-inner">
+        <div class="logo-3d">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <div>
+          <h1>SẢN PHẨM HỌC TẬP MÔN TIN HỌC - CÔ CẨM LINH</h1>
+          <p>Hệ thống lưu trữ sản phẩm học tập môn tin học của học sinh Trường THCS Trần Hưng Đạo</p>
+        </div>
+        <div class="badge"><i class="fa-solid fa-shield-halved"></i> Trực tuyến</div>
+      </div>
+    </header>
+
+    <section class="layout">
+      <!-- FORM -->
+      <div class="card animate__animated animate__fadeInLeft">
+        <h2 class="card-title">
+          <span class="title-icon"><i class="fa-solid fa-paper-plane"></i></span>
+          Gửi sản phẩm
+        </h2>
+
+        <form id="submissionForm">
+          <div class="form-group">
+            <label for="studentName">
+              <i class="fa-solid fa-user-graduate"></i> Họ và tên học sinh
+            </label>
+            <input
+              type="text"
+              id="studentName"
+              class="input"
+              placeholder="Nhập họ và tên đầy đủ..."
+              autocomplete="name"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="studentClass">
+              <i class="fa-solid fa-school"></i> Lớp
+            </label>
+            <input
+              type="text"
+              id="studentClass"
+              class="input"
+              placeholder="Nhập tên lớp (ví dụ: 11A2, 9A1, 12A5)..."
+              maxlength="30"
+              autocomplete="off"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label>
+              <i class="fa-solid fa-file-arrow-up"></i> Sản phẩm học tập
+            </label>
+
+            <div
+              class="upload"
+              id="uploadZone"
+              role="button"
+              tabindex="0"
+              aria-label="Chọn sản phẩm học tập"
+            >
+              <div class="upload-icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <strong>Kéo thả sản phẩm vào đây</strong>
+              <small>hoặc nhấp để chọn tệp</small>
+              <div id="fileName" class="file-name"></div>
+
+              <input
+                type="file"
+                id="fileInput"
+                accept=".doc,.docx,.pdf,.ppt,.pptx,.xls,.xlsx,.zip,.rar,.jpg,.jpeg,.png,.mp4"
+                required
+              >
+            </div>
+          </div>
+
+          <button type="button" id="submitBtn" class="submit-btn" onclick="handleSubmit()">
+            <i class="fa-solid fa-paper-plane"></i>
+            NỘP SẢN PHẨM
+          </button>
+
+          <div id="loading" class="loading">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Đang tải sản phẩm lên hệ thống...
+          </div>
+
+          <div class="notice">
+            <i class="fa-solid fa-circle-info"></i>
+            Vui lòng kiểm tra đúng <b>họ tên, lớp và file</b> trước khi nộp.
+            Sau khi nộp thành công, tên học sinh sẽ xuất hiện trong lịch sử bên cạnh.
+          </div>
+        </form>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="card animate__animated animate__fadeInRight">
+        <div class="history-head">
+          <div class="history-title">
+            <span class="title-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+            Danh sách học sinh đã nộp
+          </div>
+          <span id="countBadge" class="count">0</span>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Tìm tên học sinh..."
+              oninput="filterHistory()"
+            >
+          </div>
+
+          <input
+            id="filterClass"
+            class="search-input"
+            type="search"
+            placeholder="Lọc theo tên lớp..."
+            oninput="filterHistory()"
+            aria-label="Lọc theo tên lớp"
+          >
+        </div>
+
+        <div id="historyList" class="history-scroll">
+          <div class="empty">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Đang tải danh sách học sinh...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <i class="fa-solid fa-graduation-cap"></i>
+      Hệ thống nộp sản phẩm học tập trực tuyến
+    </div>
+  </main>
+
+  <script>
+    /*
+      ============================================================
+      CẤU HÌNH GOOGLE APPS SCRIPT
+      ============================================================
+      Giữ nguyên Web App URL của trang nopGA_DT.html hiện tại.
+      BACKEND APPS SCRIPT CẦN NHẬN:
+        studentName
+        studentClass
+        fileName
+        fileData
+
+      API GET nên trả về dạng:
+        [
+          { "stt": 1, "name": "Nguyễn Văn A", "className": "10A4" },
+          ...
+        ]
+
+      Code bên dưới cũng hỗ trợ dữ liệu cũ:
+        { "name": "...", "dept": "10A4" }
+    */
+    const GOOGLE_SCRIPT_API =
+      "https://script.google.com/macros/s/AKfycbxaQ2EmLJ9sG-mMlwfsJnqkaWeGNkboLRKv-nT0yRxhxjk0fJRffKeeIv9qcwvx0dd32Q/exec";
+
+    let historyData = [];
+
+    const fileInput = document.getElementById("fileInput");
+    const uploadZone = document.getElementById("uploadZone");
+    const fileName = document.getElementById("fileName");
+
+    // Mở hộp chọn file
+    uploadZone.addEventListener("click", () => fileInput.click());
+
+    uploadZone.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") fileInput.click();
+    });
+
+    // Chọn file
+    fileInput.addEventListener("change", () => {
+      showSelectedFile();
+    });
+
+    // Drag & Drop
+    ["dragenter", "dragover"].forEach(eventName => {
+      uploadZone.addEventListener(eventName, e => {
+        e.preventDefault();
+        uploadZone.classList.add("dragover");
+      });
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+      uploadZone.addEventListener(eventName, e => {
+        e.preventDefault();
+        uploadZone.classList.remove("dragover");
+      });
+    });
+
+    uploadZone.addEventListener("drop", e => {
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        showSelectedFile();
+      }
+    });
+
+    function showSelectedFile() {
+      if (!fileInput.files.length) {
+        fileName.textContent = "";
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+
+      fileName.innerHTML =
+        '<i class="fa-solid fa-circle-check"></i> ' +
+        escapeHtml(file.name) +
+        ' <span style="color:#64748b;font-size:.8rem">(' + sizeMB + ' MB)</span>';
+    }
+
+    // Tải lịch sử khi mở trang
+    window.addEventListener("load", loadHistory);
+
+    async function loadHistory() {
+      const list = document.getElementById("historyList");
+
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_API + "?action=listStudents");
+        const data = await response.json();
+
+        historyData = Array.isArray(data) ? data : [];
+        renderHistory(historyData);
+      } catch (error) {
+        console.error(error);
+        list.innerHTML = `
+          <div class="empty" style="color:#ef4444">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#fca5a5"></i>
+            Không thể tải danh sách.<br>
+            Vui lòng kiểm tra cấu hình Apps Script.
+          </div>
+        `;
+        document.getElementById("countBadge").textContent = "0";
+      }
+    }
+
+    function normalizeItem(item, index) {
+      return {
+        stt: item.stt || item.STT || index + 1,
+        name: item.name || item.studentName || item.hoTen || item["Họ và tên"] || "",
+        className:
+          item.className ||
+          item.studentClass ||
+          item.class ||
+          item.lop ||
+          item.dept ||
+          item["Lớp"] ||
+          ""
+      };
+    }
+
+    function renderHistory(data) {
+      const list = document.getElementById("historyList");
+      const count = document.getElementById("countBadge");
+
+      count.textContent = data.length;
+
+      if (!data.length) {
+        list.innerHTML = `
+          <div class="empty">
+            <i class="fa-regular fa-folder-open"></i>
+            Chưa có học sinh nào nộp sản phẩm.
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = data.map((raw, index) => {
+        const item = normalizeItem(raw, index);
+
+        return `
+          <div class="student-row animate__animated animate__fadeInUp">
+            <div class="number">${item.stt}</div>
+            <div>
+              <div class="student-name">${escapeHtml(item.name || "Chưa cập nhật")}</div>
+              <div class="student-meta">
+                <i class="fa-solid fa-check-circle" style="color:#10b981"></i>
+                Đã nộp sản phẩm
+              </div>
+            </div>
+            <div class="class-badge">${escapeHtml(item.className || "—")}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function filterHistory() {
+      const keyword = document.getElementById("searchInput").value
+        .trim()
+        .toLowerCase();
+
+      const selectedClass = document.getElementById("filterClass").value
+        .trim()
+        .toLowerCase();
+
+      const filtered = historyData.filter(raw => {
+        const item = normalizeItem(raw, 0);
+
+        const matchName = item.name.toLowerCase().includes(keyword);
+        const matchClass =
+          !selectedClass || item.className.toLowerCase().includes(selectedClass);
+
+        return matchName && matchClass;
+      });
+
+      renderHistory(filtered);
+    }
+
+    async function handleSubmit() {
+      const name = document.getElementById("studentName").value.trim();
+      const className = document.getElementById("studentClass").value.trim();
+      const file = fileInput.files[0];
+
+      if (!name || !className || !file) {
+        alert("Vui lòng nhập đầy đủ họ tên, lớp và chọn sản phẩm học tập.");
+        return;
+      }
+
+      // Giới hạn 25 MB ở giao diện.
+      // Có thể thay đổi nếu Apps Script/Drive của thầy cho phép.
+      const MAX_SIZE = 25 * 1024 * 1024;
+
+      if (file.size > MAX_SIZE) {
+        alert("File vượt quá 25 MB. Vui lòng chọn file nhỏ hơn.");
+        return;
+      }
+
+      const submitBtn = document.getElementById("submitBtn");
+      const loading = document.getElementById("loading");
+
+      submitBtn.disabled = true;
+      loading.style.display = "block";
+
+      const reader = new FileReader();
+
+      reader.onload = async function(e) {
+        const payload = {
+          // Tên trường mới
+          studentName: name,
+          studentClass: className,
+
+          // Hai trường tương thích với backend cũ nếu thầy muốn
+          // tái sử dụng Apps Script đang có.
+          teacherName: name,
+          department: className,
+
+          fileName: file.name,
+          fileData: e.target.result
+        };
+
+        try {
+          const response = await fetch(GOOGLE_SCRIPT_API, {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert("Nộp sản phẩm thành công! 🎉");
+
+            document.getElementById("submissionForm").reset();
+            fileName.textContent = "";
+
+            await loadHistory();
+          } else {
+            alert("Hệ thống báo lỗi: " + (result.message || "Không xác định"));
+          }
+        } catch (error) {
+          console.error(error);
+          alert(
+            "Không thể kết nối với máy chủ. " +
+            "Vui lòng kiểm tra Web App Apps Script."
+          );
+        } finally {
+          submitBtn.disabled = false;
+          loading.style.display = "none";
+        }
+      };
+
+      reader.onerror = function() {
+        submitBtn.disabled = false;
+        loading.style.display = "none";
+        alert("Không thể đọc file. Vui lòng thử lại.");
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
+</body>
+</html>
